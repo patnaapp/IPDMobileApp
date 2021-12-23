@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ipd_mobile/Constants/AppConstants.dart';
+import 'package:ipd_mobile/QrCodeScanning_Screen.dart';
 
 
 
@@ -50,10 +51,10 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController passwordController= TextEditingController();
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
-
 
   }
 
@@ -127,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           decoration: InputDecoration(fillColor:kPrimaryColour, filled: true,
 
                               hintText: "User ID",
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),borderSide: BorderSide.none,)),
                           validator: (value) {
                             if (value == null || value.length!=10) {
                               return 'required';
@@ -149,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           decoration: InputDecoration(fillColor: kPrimaryColour, filled: true,
 
                               hintText: "Password",
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),borderSide: BorderSide.none,)),
                           validator: (value) {
                             if (value == null || value.length==0) {
                               return 'required';
@@ -180,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: kButtonPrimaryColour,
 
                         onPressed: () {
-
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrCodeScanning_Screen()));
                         },
                       ),),
                     new Padding(padding: new EdgeInsets.only(top: 20.0 ),),
