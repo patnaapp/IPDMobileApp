@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
-import 'package:ipd_mobile/Model/RadiologyModel.dart';
+import 'Model/MedicineModel.dart';
 
-class Radiology extends StatefulWidget {
+class Medicine extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _RadiologyState();
+    return _MedicineState();
   }
 }
 
-class _RadiologyState extends State<Radiology> {
-  static int length = 11;
+class _MedicineState extends State<Medicine> {
+  //static int length = 11;
   //List<bool> isChecked = List<bool>.generate(length, (index) => false);
-  List<RadiologyModel> radiologies = [];
-  List<RadiologyModel> filteredRadiologies = [];
+  List<MedicineModel> Medicines = [];
+  List<MedicineModel> filteredMedicines = [];
 
 
 
@@ -28,8 +28,8 @@ class _RadiologyState extends State<Radiology> {
 
   CountItemsChecked1() {
     int _checkedBox = 0;
-    for (int i = 0; i < radiologies.length; i++)
-      if (radiologies[i].isChecked)
+    for (int i = 0; i < Medicines.length; i++)
+      if (Medicines[i].isChecked)
         _checkedBox++;
     return _checkedBox;
   }
@@ -57,28 +57,30 @@ class _RadiologyState extends State<Radiology> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    radiologies.add(RadiologyModel.withName("Computed Tomography"));
-    radiologies.add(RadiologyModel.withName("Fluoroscopy"));
-    radiologies.add(RadiologyModel.withName("Mammography"));
-    radiologies.add(RadiologyModel.withName("Magnetic Resonance"));
-    radiologies.add(RadiologyModel.withName("Nuclear Medicine"));
-    radiologies.add(RadiologyModel.withName("Plain X-Ray"));
-    radiologies.add(RadiologyModel.withName("Positron Emission Tomography"));
+    Medicines.add(MedicineModel.withName("Abacavir"));
+    Medicines.add(MedicineModel.withName("Abacavir/Lamivudine(Epzicom)"));
+    Medicines.add(MedicineModel.withName("Acyclovir"));
+    Medicines.add(MedicineModel.withName("Alemtuzumab"));
+    Medicines.add(MedicineModel.withName("Alendronate"));
+    Medicines.add(MedicineModel.withName("Allopurinol"));
+    Medicines.add(MedicineModel.withName("Amifostine"));
+    Medicines.add(MedicineModel.withName("Aminocaproic Acid"));
+    Medicines.add(MedicineModel.withName("Amitriptyline"));
 
-    filteredRadiologies.clear();
-    filteredRadiologies = radiologies;
+    filteredMedicines.clear();
+    filteredMedicines = Medicines;
   }
 
-  _buildListItem(RadiologyModel item, BuildContext context){
+  _buildListItem(MedicineModel item, BuildContext context){
     return CheckboxListTile(
       title: Text(item.name),
       selected: item.isChecked,
       value: item.isChecked,
       onChanged: (bool? value) {
-        int index = radiologies.indexOf(item);
+        int index = Medicines.indexOf(item);
         setState(() {
           item.isChecked = value!;
-          radiologies[index].isChecked = value;
+          Medicines[index].isChecked = value;
           /*if (value == true) {
             isChecked[0] = true;
           } else {
@@ -122,7 +124,7 @@ class _RadiologyState extends State<Radiology> {
                 //color: Colors.white,
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  " Radiology ",
+                  " Medicine ",
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -149,41 +151,41 @@ class _RadiologyState extends State<Radiology> {
                               Expanded(
                                 flex: 7,
                                 child: TextFormField(
-                                    decoration: InputDecoration(
-                                      fillColor: Color(0xffeaf1f9),
-                                      prefixIcon: Icon(Icons.search),
-                                      hintText: 'Search',
-                                      hintStyle: TextStyle(fontSize: 16),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none,
-                                        ),
+                                  decoration: InputDecoration(
+                                    fillColor: Color(0xffeaf1f9),
+                                    prefixIcon: Icon(Icons.search),
+                                    hintText: 'Search',
+                                    hintStyle: TextStyle(fontSize: 16),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
                                       ),
-                                      filled: true,
-                                      contentPadding: EdgeInsets.all(16),
-                                      //fillColor: colorSearchBg,
                                     ),
-                                    onChanged: (value){
-                                      if(value.isEmpty || value == null){
-                                        setState(() {
-                                          filteredRadiologies = radiologies;
-                                        });
-                                      }else{
-                                        print(value);
-                                        List<RadiologyModel> list = [];
-                                        for(var item in radiologies){
-                                          if(item.name.toLowerCase().contains(value.toLowerCase())){
-                                            list.add(item);
-                                          }
+                                    filled: true,
+                                    contentPadding: EdgeInsets.all(16),
+                                    //fillColor: colorSearchBg,
+                                  ),
+                                  onChanged: (value){
+                                    if(value.isEmpty || value == null){
+                                      setState(() {
+                                        filteredMedicines = Medicines;
+                                      });
+                                    }else{
+                                      print(value);
+                                      List<MedicineModel> list = [];
+                                      for(var item in Medicines){
+                                        if(item.name.toLowerCase().contains(value.toLowerCase())){
+                                          list.add(item);
                                         }
-                                        setState(() {
-                                          filteredRadiologies = list;
-                                        });
                                       }
+                                      setState(() {
+                                        filteredMedicines = list;
+                                      });
+                                    }
 
-                                    },),
+                                  },),
                               ),
                               SizedBox(width: 20.0, height: 30.0),
                               Expanded(
@@ -210,9 +212,9 @@ class _RadiologyState extends State<Radiology> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index){
-                            return _buildListItem(filteredRadiologies[index], context);
+                            return _buildListItem(filteredMedicines[index], context);
                           },
-                          itemCount: filteredRadiologies.length,
+                          itemCount: filteredMedicines.length,
                         )
                       ],
                     ),

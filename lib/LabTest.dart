@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
+//import 'package:ipd_mobile/Model/RadiologyModel.dart';
+
+import 'Model/LabTestModel.dart';
 
 class LabTest extends StatefulWidget {
   @override
@@ -12,27 +15,37 @@ class LabTest extends StatefulWidget {
 
 class _LabTestState extends State<LabTest> {
   static int length = 11;
-  List<bool> isChecked = List<bool>.generate(length, (index) => false);
-  bool blood_Count = false;
-  bool serological_Test = false;
-  bool immunologic = false;
-  bool hematocrit = false;
-  bool glucose_tolerance = false;
-  bool epinephrine = false;
-  bool enzyme_analysis = false;
-  bool cephalin = false;
-  bool bone_marrow = false;
-  bool blood_Typing = false;
+ // List<bool> isChecked = List<bool>.generate(length, (index) => false);
+  //bool computed_tomography = false;
+ // bool fluroscopy = false;
+  //bool mammography = false;
+ // bool magnetic_resonance = false;
+  //bool nuclear_medicine = false;
+  //bool plain_xray = false;
+  //bool positron_emission = false;
+  List<LabTestModel> labTest = [];
+  List<LabTestModel> filteredLabTest = [];
 
-  CountItemsChecked() {
+
+
+  /*CountItemsChecked() {
     int _checkedBox = 0;
     for (int i = 0; i < isChecked.length; i++) if (isChecked[i]) _checkedBox++;
+    return _checkedBox;
+  }*/
+
+
+  CountItemsChecked1() {
+    int _checkedBox = 0;
+    for (int i = 0; i < labTest.length; i++)
+      if (labTest[i].isChecked)
+        _checkedBox++;
     return _checkedBox;
   }
 
   void _showToast(BuildContext context) {
     final scaffold = ScaffoldMessenger.of(context);
-    var count = CountItemsChecked();
+    var count = CountItemsChecked1();
     //print(count);
     scaffold.showSnackBar(
       SnackBar(
@@ -50,6 +63,47 @@ class _LabTestState extends State<LabTest> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    labTest.add(LabTestModel.withName("Blood Count"));
+    labTest.add(LabTestModel.withName("Blood Typing"));
+    labTest.add(LabTestModel.withName("Bone Marrow Aspiration"));
+    labTest.add(LabTestModel.withName("Cephalin-Cholesterol Flocculation"));
+    labTest.add(LabTestModel.withName("Enzyme Analysis"));
+    labTest.add(LabTestModel.withName("Epinephrine Tolerance Test"));
+    labTest.add(LabTestModel.withName("Glucose Tolerance Test"));
+    labTest.add(LabTestModel.withName("Hematocrit"));
+    labTest.add(LabTestModel.withName("Immunologic Blood Test"));
+    labTest.add(LabTestModel.withName("Serological Test"));
+
+    filteredLabTest.clear();
+    filteredLabTest = labTest;
+  }
+
+  _buildListItem(LabTestModel item, BuildContext context){
+    return CheckboxListTile(
+      title: Text(item.name),
+      selected: item.isChecked,
+      value: item.isChecked,
+      onChanged: (bool? value) {
+        int index = labTest.indexOf(item);
+        setState(() {
+          item.isChecked = value!;
+          labTest[index].isChecked = value;
+          /*if (value == true) {
+            isChecked[0] = true;
+          } else {
+            isChecked[0] = false;
+          }*/
+          //print(isChecked);
+          _showToast(context);
+        });
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xffeaf1f9),
@@ -59,7 +113,7 @@ class _LabTestState extends State<LabTest> {
             children: <Widget>[
               //Header Container
               Container(
-                padding: const EdgeInsets.fromLTRB(25, 20, 20, 10),
+                padding: const EdgeInsets.fromLTRB(35, 20, 20, 10),
                 //color: Colors.white,
                 alignment: Alignment.centerLeft,
                 child: Card(
@@ -76,7 +130,7 @@ class _LabTestState extends State<LabTest> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 30, 10),
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 //color: Colors.white,
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -123,19 +177,33 @@ class _LabTestState extends State<LabTest> {
                                       contentPadding: EdgeInsets.all(16),
                                       //fillColor: colorSearchBg,
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Enter type of Lab Test';
+                                    onChanged: (value){
+                                      if(value.isEmpty || value == null){
+                                        setState(() {
+                                          filteredLabTest = labTest;
+                                        });
+                                      }else{
+                                        print(value);
+                                        List<LabTestModel> list = [];
+                                        for(var item in labTest){
+                                          if(item.name.toLowerCase().contains(value.toLowerCase())){
+                                            list.add(item);
+                                          }
+                                        }
+                                        setState(() {
+                                          filteredLabTest = list;
+                                        });
                                       }
-                                      return null;
-                                    }),
+
+                                    },
+                                    ),
                               ),
                               SizedBox(width: 20.0, height: 30.0),
                               Expanded(
                                 flex: 1,
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(5, 14, 5, 13),
+                                  const EdgeInsets.fromLTRB(5, 14, 5, 13),
                                   //margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                                   decoration: BoxDecoration(
                                       color: Color(0xffeaf1f9),
@@ -151,187 +219,15 @@ class _LabTestState extends State<LabTest> {
                             ],
                           ),
                         ),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Blood Count'),
-                          selected: blood_Count,
-                          value: blood_Count,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              blood_Count = value!;
-                              if (value == true) {
-                                isChecked[0] = true;
-                              } else {
-                                isChecked[0] = false;
-                              }
-                              //print(isChecked);
-                              _showToast(context);
-                            });
+                        ListView.builder(
+                          physics: ScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index){
+                            return _buildListItem(filteredLabTest[index], context);
                           },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Blood Typing'),
-                          selected: blood_Typing,
-                          value: blood_Typing,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              blood_Typing = value!;
-                              if (value == true) {
-                                isChecked[1] = true;
-                              } else {
-                                isChecked[1] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Bone Marrow Aspiration'),
-                          selected: bone_marrow,
-                          value: bone_marrow,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              bone_marrow = value!;
-                              if (value == true) {
-                                isChecked[2] = true;
-                              } else {
-                                isChecked[2] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title:
-                              const Text('Cephalin-Cholesterol Flocculation'),
-                          selected: cephalin,
-                          value: cephalin,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              cephalin = value!;
-                              if (value == true) {
-                                isChecked[3] = true;
-                              } else {
-                                isChecked[3] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Enzyme Analysis'),
-                          selected: enzyme_analysis,
-                          value: enzyme_analysis,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              enzyme_analysis = value!;
-                              if (value == true) {
-                                isChecked[4] = true;
-                              } else {
-                                isChecked[4] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Epinephrine Tolerance Test'),
-                          selected: epinephrine,
-                          value: epinephrine,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              epinephrine = value!;
-                              if (value == true) {
-                                isChecked[5] = true;
-                              } else {
-                                isChecked[5] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Glucose Tolerance Test'),
-                          selected: glucose_tolerance,
-                          value: glucose_tolerance,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              glucose_tolerance = value!;
-                              if (value == true) {
-                                isChecked[6] = true;
-                              } else {
-                                isChecked[6] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Hematocrit'),
-                          selected: hematocrit,
-                          value: hematocrit,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              hematocrit = value!;
-                              if (value == true) {
-                                isChecked[7] = true;
-                              } else {
-                                isChecked[7] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Immunologic Blood Test'),
-                          selected: immunologic,
-                          value: immunologic,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              immunologic = value!;
-                              if (value == true) {
-                                isChecked[8] = true;
-                              } else {
-                                isChecked[8] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-                        Container(
-                            child: CheckboxListTile(
-                          title: const Text('Serological Test'),
-                          selected: serological_Test,
-                          value: serological_Test,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              serological_Test = value!;
-                              if (value == true) {
-                                isChecked[9] = true;
-                              } else {
-                                isChecked[9] = false;
-                              }
-                              _showToast(context);
-                            });
-                          },
-                        )),
-
-                        /*Container(
-                        color: Colors.white,
-                        height: 600.0,
-                        alignment: Alignment.center,
-                        child: Image.asset('Images/newlogo.jpg'),
-                      ),*/
-
-                        //TextField nearly at bottom
+                          itemCount: filteredLabTest.length,
+                        )
                       ],
                     ),
                   ),

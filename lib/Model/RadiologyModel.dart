@@ -1,14 +1,14 @@
 
 class RadiologyModel{
-  int id = 0;
+  //int id = 0;
   String name;
   bool isChecked = false;
 
-  RadiologyModel(
+  /*RadiologyModel(
       this.id,
       this.name,
       this.isChecked
-      );
+      );*/
 
   RadiologyModel.withName(this.name);
 

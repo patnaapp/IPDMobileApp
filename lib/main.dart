@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ipd_mobile/LabTest.dart';
 import 'package:ipd_mobile/Radiology.dart';
+import 'package:ipd_mobile/Medicine.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: Radiology(),
+      home: Medicine(),
       //home: ScanQR(),
       //home: functionCall(),
       //home : QRCodeScanner(),
